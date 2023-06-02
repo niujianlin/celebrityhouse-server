@@ -7,6 +7,11 @@ const {User} = require("../db/user")
 const router = express.Router();
 const pagination = require('mongoose-sex-page')
 
+const fs = require("fs")
+// 配置雪花随机数生成
+const GenId = require("../utils/SnowFlake")
+const genid = new GenId({ WorkerId: 1 })
+
 // 查询所有评论
 router.get("/list", async (req, res)=> {
     let comments = await Comment.find()
