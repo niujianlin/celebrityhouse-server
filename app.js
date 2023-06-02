@@ -24,6 +24,7 @@ require("./db/DbUtils")
 // require('./db/user');
 // require("./db/category");
 // require("./db/article")
+require("./db/comment")
 
 
 // 可以看到客户端所有请求
@@ -57,6 +58,9 @@ app.use(express.static(path.join(__dirname, "public")))
 app.use("/admin", require("./routers/AdminRouter"))
 app.use("/artical", require("./routers/ArticalRouter"))
 app.use("/comment", require("./routers/CommentRouter"))
+app.use("/category", require("./routers/CategoryRouter"))
+app.use("/upload", require("./routers/UploadRouter"))
+
 
 app.listen(port, ()=> {
     console.log(`启动成功，端口为：${port}`)

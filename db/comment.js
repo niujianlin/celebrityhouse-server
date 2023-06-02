@@ -33,6 +33,9 @@ const commentSchema = new mongoose.Schema({
     //评论内容
     content: {
         type: String
+    },
+    imgpath: {
+        type: String,
     }
 })
 

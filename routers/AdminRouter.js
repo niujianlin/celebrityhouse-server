@@ -73,7 +73,7 @@ router.post('/login', async (req, res) => {
             res.send({
                 code: 200,
                 msg: "登录成功",
-                data: user
+                data: {user,login_token}
             })
         }else{
             res.send({

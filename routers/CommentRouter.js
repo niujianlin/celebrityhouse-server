@@ -7,9 +7,26 @@ const {User} = require("../db/user")
 const router = express.Router();
 const pagination = require('mongoose-sex-page')
 
+// 查询所有评论
+router.get("/list", async (req, res)=> {
+    let comments = await Comment.find()
+    if(comments){
+        // 查到所有评论
+        res.send({
+            code:200,
+            msg: "查到所有评论",
+            data: comments
+        })
+    }else{
+        res.send({
+            code: 404,
+            msg: "未查到评论",
+        })
+    }
+})
 
-// 查询某用户发布的所有评论
-router.get("/detail", async (req, res)=> {
+// 查询某用户发布的所有评论（父级评论）
+router.get("/user", async (req, res)=> {
     let id = req.query.id
     let comments = await Comment.find({ uid: id, isparent: 0 })
     if(comments){
@@ -31,7 +48,7 @@ router.get("/detail", async (req, res)=> {
 
 // 添加一条父评论或子评论
 router.post("/add",async (req, res)=> {
-    const {content, uid, aid, isparent, parentid} = req.body;
+    const {content, uid, aid, isparent, parentid, imgpath} = req.body;
 
     // 验证帖子aid是否存在
     // let article = Article.findOne({_id: aid})  这么写没法使用解构赋值
@@ -57,6 +74,7 @@ router.post("/add",async (req, res)=> {
                     content,
                     isparent,
                     parentid,
+                    imgpath
                 })
                 if(newcomment){
                     res.send({
@@ -78,6 +96,7 @@ router.post("/add",async (req, res)=> {
                 content,
                 isparent,
                 parentid,
+                imgpath
             })
             if(newcomment){
                 res.send({
@@ -148,6 +167,29 @@ router.get("/delete", async (req,res) => {
 
 
 })
+
+// 查找某帖子的所有评论
+router.get("/artical", async(req,res) => {
+    let id = req.query.id
+    let comments = await Comment.find({aid:id}).populate('uid')
+    // 拼接用户姓名
+
+    if(comments) {
+        // 查找到该用户的所有父级评论
+        res.send({
+            code:200,
+            msg: "查到该帖子的所有评论",
+            data: comments
+        })
+    }else{
+        //未查到
+        res.send({
+            code:200,
+            msg:"未查到该帖子的所有评论"
+        })
+    }
+})
+
 
 
 
